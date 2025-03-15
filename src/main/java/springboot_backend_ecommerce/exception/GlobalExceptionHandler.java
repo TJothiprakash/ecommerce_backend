@@ -1,5 +1,6 @@
 package springboot_backend_ecommerce.exception;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleAllExceptions(Exception ex) {
+    public ResponseEntity<Map<String, String>> handleAllExceptions(@NotNull Exception ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Something went wrong");
         errorResponse.put("message", ex.getMessage());
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<Map<String, String>> handleResponseStatusException(ResponseStatusException ex) {
+    public ResponseEntity<Map<String, String>> handleResponseStatusException(@NotNull ResponseStatusException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Invalid request");
         errorResponse.put("message", ex.getReason());

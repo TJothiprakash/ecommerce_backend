@@ -16,7 +16,13 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private String email;
     private String role;
+
+    /**
+     *  @param isVerified verification variable
+     */
+    private boolean isVerified = false;
 
     // Getters and Setters
 }
