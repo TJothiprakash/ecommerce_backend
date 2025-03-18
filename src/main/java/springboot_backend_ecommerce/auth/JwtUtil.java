@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class JwtUtil {
 
 
-    private static final String SECRET_KEY = SecretKeyGenerator.main();
+    private static final String SECRET_KEY = "hithisisjpandyou'llneverknowmysecretkey";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
 
     private Key getSigningKey() {
