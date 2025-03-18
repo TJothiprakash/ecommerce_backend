@@ -1,39 +1,31 @@
 package springboot_backend_ecommerce.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import springboot_backend_ecommerce.auth.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
+        http
+                .csrf(csrf -> csrf.disable())  // Disable CSRF (useful for Postman)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/register", "/auth/login").permitAll() // Allow public access
+                        .anyRequest().authenticated() // Protect other endpoints
                 )
-                .formLogin(login -> login
-                        .defaultSuccessUrl("/hello", true) // Redirect to /hello after successful login
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                )
-                .userDetailsService(userDetailsService)
-                .build();
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // API should be stateless
+                .httpBasic(Customizer.withDefaults()); // Enable Basic Auth (optional, remove if using JWT)
+
+        return http.build();
     }
 
     @Bean
